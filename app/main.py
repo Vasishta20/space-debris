@@ -12,9 +12,9 @@ app = FastAPI(title="Space Debris Collision Risk Analytics", version="0.1.0")
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"], allow_methods=["GET"], allow_headers=["*"])
 REPORTS = Path(__file__).resolve().parents[1] / "reports" / "eda"
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SAMPLE_100K = PROJECT_ROOT / "data" / "joined_object_type_100k.csv"
-SAMPLE_100K_META = PROJECT_ROOT / "data" / "joined_object_type_100k_metadata.json"
-PREDICTION_PARTS = PROJECT_ROOT / "data" / "pyspark_ml_joined_100k" / "predictions_csv"
+REVIEW3_CATALOG = PROJECT_ROOT / "data" / "review3_catalog.csv"
+REVIEW3_CATALOG_META = PROJECT_ROOT / "data" / "review3_catalog_metadata.json"
+PREDICTION_PARTS = PROJECT_ROOT / "data" / "pyspark_ml_catalog" / "predictions_csv"
 _PREDICTION_LOOKUP: dict[tuple[str, str], str] | None = None
 
 def _canonical_epoch(value: str) -> str:
@@ -56,27 +56,27 @@ def ingestion():
         row = c.execute("SELECT * FROM ingestion_batches ORDER BY id DESC LIMIT 1").fetchone()
     return dict(row) if row else {"source": None, "rows_seen": 0, "rows_loaded": 0, "rows_rejected": 0, "created_at": None}
 
-@app.get("/api/catalog-100k/summary")
-def catalog_100k_summary():
-    if not SAMPLE_100K_META.exists():
-        raise HTTPException(404, "100k catalog view not found")
-    return json.loads(SAMPLE_100K_META.read_text(encoding="utf-8"))
+@app.get("/api/catalog/summary")
+def catalog_summary():
+    if not REVIEW3_CATALOG_META.exists():
+        raise HTTPException(404, "catalog view not found")
+    return json.loads(REVIEW3_CATALOG_META.read_text(encoding="utf-8"))
 
-@app.get("/api/catalog-100k/objects")
-def catalog_100k_objects(
+@app.get("/api/catalog/objects")
+def catalog_objects(
     limit: int = Query(24, ge=1, le=100),
     offset: int = Query(0, ge=0),
     object_type: str | None = None,
     search: str | None = None,
 ):
-    if not SAMPLE_100K.exists() or not SAMPLE_100K_META.exists():
-        raise HTTPException(404, "100k catalog view not found")
+    if not REVIEW3_CATALOG.exists() or not REVIEW3_CATALOG_META.exists():
+        raise HTTPException(404, "catalog view not found")
     wanted_type = object_type.strip().upper() if object_type else None
     wanted_search = search.strip().lower() if search else None
     predictions = _prediction_lookup()
     items = []
     matched = 0
-    with SAMPLE_100K.open("r", encoding="utf-8", newline="") as handle:
+    with REVIEW3_CATALOG.open("r", encoding="utf-8", newline="") as handle:
         for row in csv.DictReader(handle):
             row_type = (row.get("OBJECT_TYPE") or "").upper()
             searchable = f"{row.get('norad_id', '')} {row.get('OBJECT_NAME', '')}".lower()

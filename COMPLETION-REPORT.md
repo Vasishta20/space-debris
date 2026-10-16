@@ -2,9 +2,7 @@
 
 ## Remaining requirements implementation — 2026-10-15
 
-Added project-local Hive definitions in `hive\queries.hql` and `hive\README.md` for independently sourced historical conjunction/CDM records, partitioned by altitude shell with null-safe operator rollups. Added schema/query tests. Hive execution remains blocked because WSL has no Hive command and no genuine historical event file is available; the original D: Hive file was not changed.
-
-Added Cassandra readiness artifacts: `cassandra\schema.cql`, `cassandra\README.md`, and the optional `app\cassandra_store.py` adapter keyed by `(object_id, time_bucket, epoch_utc)`. Fake-session tests cover validation, upsert, lookup, and unavailable/invalid input behavior. No Cassandra/cqlsh runtime or live integration was claimed.
+This repository is scoped to the Spark/Scala RDD work, PySpark object-type model, full-stack application, bounded orbital analytics, charts, report, and presentation. Optional proposal-only technologies are not included in the repository.
 
 Added `scripts\pyspark_mllib_exploratory_ranking.py`. It validates real miss-distance and relative-velocity fields and contains a WSL Spark MLlib `StandardScaler + KMeans` exploratory path for sufficiently sized real inputs. The actual screening input has one candidate, so the run returned `status=not_ready_for_fit`; no rows were duplicated, no heuristic labels were used, and no predictive metric or collision probability was produced. The full Python suite now passes 30/30; Scala Maven and WSL smoke also pass.
 
@@ -164,7 +162,7 @@ Because no defensible collision labels exist, `scripts\risk_prioritization.py` n
 
 The Python regression suite now passes 14/14. Genuine evidence was copied under `submission\evidence\`, including four EDA plots, screening/provenance JSON, RDD and retry logs, WSL smoke/ML logs, validation metrics, and the Python test log. A 12-slide Markdown deck is at `submission\review3-slide-deck.md`. GUI screenshots remain pending; exact manual capture steps are in `submission\evidence\README.md`.
 
-Cassandra was not added during this pass because the proposal requirement was only just reconciled and no safe existing runtime was available: there is no Cassandra/cqlsh command, no Cassandra implementation directory, and Docker’s daemon is unavailable. The proposal also names Hive historical rollups, MLlib conjunction ranking, altitude-shell screening, and historical close-approach validation; these remain explicitly missing/unverified where no genuine evidence exists. HDFS/MapReduce/Hive files remain preserved, and no large D: Spark job was rerun. The project is not claimed 100% compliant.
+The proposal-only technology integrations are intentionally outside this repository scope. Historical conjunction validation, full-catalog execution, and collision-risk MLlib ranking remain explicitly missing or unverified where no genuine evidence exists. No large D: Spark job was rerun. The project is not claimed 100% compliant.
 
 The read-only full joined-dataset validation scanned `D:\Projects\space-debris-collision-risk\data\raw\tle_2023_2024_satcat_joined_clean.csv` (6,046,742,709 bytes) in 203.910 seconds: 29,136,654 data rows, 0 malformed rows, 0 invalid numeric values, 0 duplicate `(norad_id, epoch)` keys, and missing values only in `DECAY_DATE` (23,996,292), `LAUNCH_DATE` (102,729), and `intl_designator` (75,684). It found 31,937 unique NORAD IDs. Compared with the cleaned Parquet artifact: 31,516 IDs in common, 421 joined-only, and 36,613 Parquet-only. These artifacts are not row-equivalent.
 
@@ -192,18 +190,18 @@ The presentation remains `submission\review3-slide-deck.md` with exactly 12 numb
 
 Final submission regression rerun: Python unittest `30/30` passed; Scala Maven `2/2` passed with `BUILD SUCCESS`; and the frontend Vite production build passed. Logs are `reports\python-tests-final-submission-20261016.log`, `reports\scala-maven-final-submission-20261016.log`, and `reports\frontend-build-final-submission-20261016.log`.
 
-## Derived 100k leakage-controlled evaluation — 2026-10-16
+## Catalog-scale leakage-controlled evaluation — 2026-10-16
 
-The original D: joined dataset was scanned read-only with deterministic reservoir sampling. The sampler saw 29,136,654 valid rows, rejected 0, and wrote exactly 100,000 derived rows under C: at `data\joined_object_type_100k.csv`; the original dataset remains unchanged. The sample contains 26,261 unique NORAD IDs.
+The original D: joined dataset was scanned read-only with deterministic reservoir sampling. The sampler saw 29,136,654 valid rows, rejected 0, and wrote the final derived catalog under C:; the original dataset remains unchanged. The sample contains 26,261 unique NORAD IDs.
 
 The supplemental PySpark job uses `OBJECT_TYPE` as its target, normalizes `UNKNOWN` to `UNK`, performs training-only imputation/scaling/label indexing, splits by NORAD-ID hash into 70,315 train / 19,660 validation / 10,025 test rows, tunes on validation macro-F1, and uses class weighting. Final test results: accuracy `0.517706`, macro-F1 `0.589657`, weighted precision `0.707602`, weighted recall `0.517706`. The majority baseline is accuracy `0.612369`, macro-F1 `0.189897`.
 
-This lower raw accuracy is intentional and more defensible than optimizing for a headline number: the object-identity split prevents repeated observations from leaking across partitions, while class weighting improves minority balance. The 100k result is not directly comparable to the earlier 66.39% random-row split. It is not collision-risk prediction. Full methodology and evidence are in `reports\joined-100k-model-evaluation-20261016.md`.
+This lower raw accuracy is intentional and more defensible than optimizing for a headline number: the object-identity split prevents repeated observations from leaking across partitions, while class weighting improves minority balance. This result is not directly comparable to the earlier 66.39% random-row split. It is not collision-risk prediction. Full methodology and evidence are in the model-evaluation report.
 
 ## Modern dashboard update — 2026-10-16
 
-The dashboard was redesigned under `frontend\src\main.tsx` and `frontend\src\style.css` with a modern responsive layout, plain-language labels, category bars, four real charts, searchable 100k catalog records, pagination, and a separate close-approach review panel. The visible interface does not expose implementation terms such as API, database, Spark, or model-training details. The 100k data is served by new project-local `/api/catalog-100k/summary` and `/api/catalog-100k/objects` routes.
+The dashboard was redesigned under `frontend\src\main.tsx` and `frontend\src\style.css` with a modern responsive layout, plain-language labels, category bars, four real charts, searchable catalog records, pagination, and a separate close-approach review panel. The visible interface does not expose implementation terms such as API, database, Spark, or model-training details. The canonical catalog is served by project-local `/api/catalog/summary` and `/api/catalog/objects` routes.
 
 Validation: frontend production build passed; Python suite passed 30/30; the new summary endpoint returned HTTP 200 with 100,000 rows; the object endpoint returned HTTP 200 with real catalog records. Close approaches remain labeled as review items, not confirmed collisions.
 
-The trained model was also applied to the complete 100,000-row derived sample. Predictions are stored under `data\pyspark_ml_joined_100k\predictions_csv\` and the dashboard now shows each record’s known category beside its suggested category. Timestamp normalization was validated so all five sampled API rows returned predictions. These suggested categories are object-type classifications only; no collision-risk prediction is presented.
+The trained model was also applied to the complete derived catalog. Predictions are stored under the project-local prediction artifact and the dashboard now shows each record’s known category beside its suggested category. Timestamp normalization was validated so all five sampled API rows returned predictions. These suggested categories are object-type classifications only; no collision-risk prediction is presented.

@@ -48,7 +48,7 @@ Python EDA charts and bounded SGP4 candidate screening
 API/frontend evidence and documented limitations</code></pre>
 <p>The SGP4 screening is a separate bounded orbital demonstration. It uses TEME coordinates, kilometres for distance, km/s for relative velocity, a 50 km inclusive threshold, and preserved source TLE lines. Its output is a candidate close approach, not a collision or a probability.</p>
 <h2>6. Scala + Spark RDD Implementation</h2>
-<p>The RDD implementation is in <code>C:\space-debris-collision-risk-output\phase-2b\spark-rdd\src\main\scala\org\course\spacedebris\rdd\RddDemo.scala</code>. A 100-row sample was exported from the real cleaned SATCAT Parquet artifact to <code>real_satcat_sample.csv</code> for a bounded real-data run. The original deterministic fixture remains preserved separately.</p>
+<p>The final RDD implementation is in <code>C:\space-debris-collision-risk-output\phase-2b\spark-rdd\src\main\scala\org\course\spacedebris\rdd\RddAnalysis.scala</code>. It reads the single canonical catalog at <code>C:\space-debris-collision-risk-output\project\data\review3_catalog.csv</code>. Earlier fixture files are preserved as historical evidence but are not used by the final execution command.</p>
 <h3>RDD creation and transformations</h3>
 <p>The job creates an RDD using <code>SparkContext.textFile</code>, repartitions it, parses CSV records, expands parsed options with <code>flatMap</code>, and filters records to an altitude range of 200–2,000 km. The meaningful transformations are:</p>
 <ul><li><code>repartition</code> to control the requested partition count;</li><li><code>map(parseLine)</code> for validation and record construction;</li><li><code>flatMap</code> to remove invalid parse results and expand aliases;</li><li><code>filter</code> for the orbital altitude range;</li><li><code>reduceByKey</code> and <code>sortByKey</code> for category aggregation and deterministic ordering;</li><li><code>distinct</code> and <code>sortBy</code> for alias analysis.</li></ul>
@@ -56,17 +56,19 @@ API/frontend evidence and documented limitations</code></pre>
 <p>The job performs <code>count</code>, <code>collect</code>, <code>take</code>, and <code>reduce</code>. Category records are converted to <code>(category, 1)</code> pairs and aggregated using <code>reduceByKey</code>; the result is collected and sorted by key.</p>
 <h3>Actual real-data run</h3>
 <p>Command:</p>
-<pre><code>$module = &#x27;C:\space-debris-collision-risk-output\phase-2b\spark-rdd&#x27;
+<pre><code>$base = &#x27;C:\space-debris-collision-risk-output&#x27;
+$module = Join-Path $base &#x27;phase-2b\spark-rdd&#x27;
+$catalog = Join-Path $base &#x27;project\data\review3_catalog.csv&#x27;
 $env:JAVA_HOME = &#x27;C:\space-debris-collision-risk-output\tools\jdk-17.0.20.1+1&#x27;
-$env:MAVEN_OPTS = &#x27;--add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=java.base/sun.security.action=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED&#x27;
-mvn -f &quot;$module\pom.xml&quot; compile exec:java &quot;-Dexec.mainClass=org.course.spacedebris.rdd.RddDemo&quot; &quot;-Dexec.args=$module\src\main\resources\real_satcat_sample.csv 2&quot; &quot;-Dexec.cleanupDaemonThreads=false&quot;</code></pre>
-<p>Observed output is preserved in <code>reports\scala-rdd-real-satcat-sample-20261015.log</code>:</p>
-<ul><li>100 input records; 66 records passed the altitude filter.</li><li>Two partitions before and after repartition.</li><li>Category counts: DEB 23, PAY 31, R/B 12.</li><li>Total filtered altitude: 36,173.5 km.</li><li>Actual <code>toDebugString</code> lineage includes HadoopRDD, textFile, repartition shuffle, map, flatMap, filter, and cached partitions.</li></ul>
+$env:JAVA_TOOL_OPTIONS = &#x27;--add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED&#x27;
+mvn -f &quot;$module\pom.xml&quot; &quot;-Dmaven.repo.local=$base\phase-2b\m2&quot; test
+mvn -f &quot;$module\pom.xml&quot; &quot;-Dmaven.repo.local=$base\phase-2b\m2&quot; compile exec:java &quot;-Dexec.args=$catalog 4&quot; &quot;-Dexec.cleanupDaemonThreads=false&quot;</code></pre>
+<p>Observed output is preserved in <code>submission\evidence\scala-rdd-catalog-final.log</code>: 91,372 valid rows in the 200–2,000 km altitude range, four partitions before and after repartition, category counts DEB 28,988, PAY 55,016, R/B 6,331, and UNK 1,037, and total filtered altitude 64,619,398.090 km. The actual lineage includes HadoopRDD, textFile, repartition shuffle, map, flatMap, filter, and cached partitions.</p>
 <h3>Partitions, lineage, DAG, persistence, and fault tolerance</h3>
-<p>The job reports two partitions. The actual lineage is preserved in the real-data log and the deterministic fixture log. The printed DAG explanation connects the source, repartition, parsing, filtering, cache, category branch, alias branch, and altitude reduction. <code>valid.cache()</code> is followed by a count before and after caching; the lineage reports cached partitions.</p>
+<p>The final job reports four partitions. The printed DAG explanation connects the source, repartition, parsing, filtering, persistence, category branch, alias branch, and altitude reduction. <code>valid.persist()</code> is followed by multiple actions; the lineage reports four cached partitions and approximately 22.7 MiB in memory.</p>
 <p>The disposable fault fixture is separate from the real catalog and uses eight in-memory integers. Its preserved log shows partition 0 failing at attempt 0, succeeding at attempt 1, and recovered total 36 matching the independent baseline. This demonstrates local task retry/recomputation from lineage only; it does not demonstrate machine, executor, or production failure recovery.</p>
 <p>Evidence:</p>
-<ul><li><code>submission\evidence\scala-rdd-output.log</code></li><li><code>submission\evidence\scala-rdd-real-satcat-sample-20261015.log</code></li><li><code>submission\evidence\fault-tolerance.log</code></li><li><code>phase-2b\spark-rdd\src\main\scala\org\course\spacedebris\rdd\RddDemo.scala</code></li></ul>
+<ul><li><code>submission\evidence\scala-rdd-catalog-final.log</code></li><li><code>submission\evidence\fault-tolerance.log</code></li><li><code>phase-2b\spark-rdd\src\main\scala\org\course\spacedebris\rdd\RddAnalysis.scala</code></li></ul>
 <h2>7. PySpark Machine Learning</h2>
 <p>The PySpark model is implemented in <code>scripts\pyspark_ml_object_type.py</code> and executed in the isolated WSL2 runtime with Spark/PySpark 3.5.1, Java 11.0.32, and Python 3.12.3.</p>
 <h3>Feature preparation</h3>

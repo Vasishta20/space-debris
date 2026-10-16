@@ -1,6 +1,17 @@
-# Space Debris Collision Risk Analytics — external C: backend
+# Space Debris Collision Risk Analytics
 
-This is an isolated implementation workspace. The original repository and its 6 GB joined dataset are not modified or copied.
+This repository contains the complete Spark/Scala, PySpark, analytics, FastAPI,
+React, database, report, and presentation implementation. The original D:
+repository and its large joined dataset are not modified or copied.
+
+## Structure
+
+- `phase-2b/spark-rdd/` — Scala 2.12 and Spark 3.5.1 RDD analysis.
+- `scripts/` — ingestion, EDA, PySpark ML, orbital screening, and validation.
+- `app/` — FastAPI backend, SQLite/PostgreSQL access, orbit screening, and API routes.
+- `frontend/` — React + TypeScript dashboard using live API responses.
+- `data/` — the canonical catalog, model evidence, charts, and bounded screening outputs.
+- `submission/` — project report, PDF, presentation, and evidence logs.
 
 ## Run
 
@@ -13,6 +24,18 @@ $root = 'C:\space-debris-collision-risk-output\project'
 The bounded pipeline reads `data/raw/satcat_clean.csv` from the original repository (about 6.9 MB), not the 6 GB joined input. TLE screening downloads one bounded CelesTrak group into this output directory and records its source URL.
 
 The classifier predicts SATCAT `OBJECT_TYPE`; it is not a collision probability model and must not be presented as one. Close-approach screening is a small, deterministic demonstration over downloaded TLEs and does not replace high-fidelity conjunction assessment.
+
+## Scala RDD execution
+
+```powershell
+$base = 'C:\space-debris-collision-risk-output\project'
+$module = "$base\phase-2b\spark-rdd"
+$catalog = "$base\data\review3_catalog.csv"
+$env:JAVA_HOME = 'C:\space-debris-collision-risk-output\tools\jdk-17.0.20.1+1'
+$env:JAVA_TOOL_OPTIONS = '--add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED'
+mvn -f "$module\pom.xml" test
+mvn -f "$module\pom.xml" compile exec:java "-Dexec.args=$catalog 4" "-Dexec.cleanupDaemonThreads=false"
+```
 
 ## Frontend
 

@@ -5,7 +5,7 @@ Source rubric: the Review 3 implementation brief in the project attachments, rea
 | Requirement | Status | Evidence / gap |
 |---|---|---|
 | Scala Spark RDD loads orbital records | Verified | External module loads a deterministic orbital fixture; genuine run in `phase-2b/scala-rdd-output-final.log`. It intentionally does not read the 6 GB joined file. |
-| At least three meaningful transformations | Verified | `repartition`, `map`, `flatMap`, `filter`, `reduceByKey`, `distinct`, and sorting are implemented and visible in `RddDemo.scala`. |
+| At least three meaningful transformations | Verified | `repartition`, `map`, `flatMap`, `filter`, `reduceByKey`, `distinct`, and sorting are implemented and visible in `Review3RddAnalysis.scala`; the canonical catalog run is preserved in `submission/evidence/scala-rdd-review3-catalog-final.log`. |
 | At least two actions | Verified | `count`, `collect`, `take`, and `reduce` execute; output is preserved. |
 | Key-value RDD operations | Verified | Category pairs, `reduceByKey`, and `sortByKey`. |
 | Actual partition count | Verified | Output records 2 partitions before and after repartition. |

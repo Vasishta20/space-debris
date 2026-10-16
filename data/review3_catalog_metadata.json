@@ -1,6 +1,6 @@
 {
   "source": "D:\\Projects\\space-debris-collision-risk\\data\\raw\\tle_2023_2024_satcat_joined_clean.csv",
-  "output": "C:\\space-debris-collision-risk-output\\project\\data\\joined_object_type_100k.csv",
+  "output": "C:\\space-debris-collision-risk-output\\project\\data\\review3_catalog.csv",
   "requested_rows": 100000,
   "sample_rows": 100000,
   "source_valid_rows_seen": 29136654,

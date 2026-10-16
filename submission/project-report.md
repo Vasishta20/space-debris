@@ -67,7 +67,7 @@ The SGP4 screening is a separate bounded orbital demonstration. It uses TEME coo
 
 ## 6. Scala + Spark RDD Implementation
 
-The RDD implementation is in `C:\space-debris-collision-risk-output\phase-2b\spark-rdd\src\main\scala\org\course\spacedebris\rdd\RddDemo.scala`. A 100-row sample was exported from the real cleaned SATCAT Parquet artifact to `real_satcat_sample.csv` for a bounded real-data run. The original deterministic fixture remains preserved separately.
+The final RDD implementation is in `C:\space-debris-collision-risk-output\phase-2b\spark-rdd\src\main\scala\org\course\spacedebris\rdd\RddAnalysis.scala`. It reads the single canonical catalog at `C:\space-debris-collision-risk-output\project\data\review3_catalog.csv`. Earlier fixture files are preserved as historical evidence but are not used by the final execution command.
 
 ### RDD creation and transformations
 
@@ -89,32 +89,28 @@ The job performs `count`, `collect`, `take`, and `reduce`. Category records are 
 Command:
 
 ```powershell
-$module = 'C:\space-debris-collision-risk-output\phase-2b\spark-rdd'
+$base = 'C:\space-debris-collision-risk-output'
+$module = Join-Path $base 'phase-2b\spark-rdd'
+$catalog = Join-Path $base 'project\data\review3_catalog.csv'
 $env:JAVA_HOME = 'C:\space-debris-collision-risk-output\tools\jdk-17.0.20.1+1'
-$env:MAVEN_OPTS = '--add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=java.base/sun.security.action=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED'
-mvn -f "$module\pom.xml" compile exec:java "-Dexec.mainClass=org.course.spacedebris.rdd.RddDemo" "-Dexec.args=$module\src\main\resources\real_satcat_sample.csv 2" "-Dexec.cleanupDaemonThreads=false"
+$env:JAVA_TOOL_OPTIONS = '--add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED'
+mvn -f "$module\pom.xml" "-Dmaven.repo.local=$base\phase-2b\m2" test
+mvn -f "$module\pom.xml" "-Dmaven.repo.local=$base\phase-2b\m2" compile exec:java "-Dexec.args=$catalog 4" "-Dexec.cleanupDaemonThreads=false"
 ```
 
-Observed output is preserved in `reports\scala-rdd-real-satcat-sample-20261015.log`:
-
-- 100 input records; 66 records passed the altitude filter.
-- Two partitions before and after repartition.
-- Category counts: DEB 23, PAY 31, R/B 12.
-- Total filtered altitude: 36,173.5 km.
-- Actual `toDebugString` lineage includes HadoopRDD, textFile, repartition shuffle, map, flatMap, filter, and cached partitions.
+Observed output is preserved in `submission\evidence\scala-rdd-catalog-final.log`: 91,372 valid rows in the 200–2,000 km altitude range, four partitions before and after repartition, category counts DEB 28,988, PAY 55,016, R/B 6,331, and UNK 1,037, and total filtered altitude 64,619,398.090 km. The actual lineage includes HadoopRDD, textFile, repartition shuffle, map, flatMap, filter, and cached partitions.
 
 ### Partitions, lineage, DAG, persistence, and fault tolerance
 
-The job reports two partitions. The actual lineage is preserved in the real-data log and the deterministic fixture log. The printed DAG explanation connects the source, repartition, parsing, filtering, cache, category branch, alias branch, and altitude reduction. `valid.cache()` is followed by a count before and after caching; the lineage reports cached partitions.
+The final job reports four partitions. The printed DAG explanation connects the source, repartition, parsing, filtering, persistence, category branch, alias branch, and altitude reduction. `valid.persist()` is followed by multiple actions; the lineage reports four cached partitions and approximately 22.7 MiB in memory.
 
 The disposable fault fixture is separate from the real catalog and uses eight in-memory integers. Its preserved log shows partition 0 failing at attempt 0, succeeding at attempt 1, and recovered total 36 matching the independent baseline. This demonstrates local task retry/recomputation from lineage only; it does not demonstrate machine, executor, or production failure recovery.
 
 Evidence:
 
-- `submission\evidence\scala-rdd-output.log`
-- `submission\evidence\scala-rdd-real-satcat-sample-20261015.log`
+- `submission\evidence\scala-rdd-catalog-final.log`
 - `submission\evidence\fault-tolerance.log`
-- `phase-2b\spark-rdd\src\main\scala\org\course\spacedebris\rdd\RddDemo.scala`
+- `phase-2b\spark-rdd\src\main\scala\org\course\spacedebris\rdd\RddAnalysis.scala`
 
 ## 7. PySpark Machine Learning
 

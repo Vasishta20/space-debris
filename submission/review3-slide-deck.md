@@ -32,13 +32,13 @@ The 6 GB joined dataset was not copied or used for a full-catalog job.
 
 ## 5. Scala + Spark RDD
 
-The RDD job creates records with `textFile`, then uses `repartition`, `map`, `flatMap`, and `filter`. It uses `reduceByKey` and `sortByKey` for category aggregation, plus `distinct`, `sortBy`, and `take` for aliases.
+The final RDD job reads the single canonical Review 3 catalog with `textFile`, then uses `repartition`, `map`, `flatMap`, and `filter`. It uses `reduceByKey` and `sortByKey` for category aggregation, plus `distinct`, `sortBy`, and `take` for aliases.
 
-Actions include `count`, `collect`, `take`, and `reduce`. A real-data bounded run used 100 rows sampled from the cleaned SATCAT Parquet artifact: 66 passed the altitude filter, with DEB 23, PAY 31, and R/B 12.
+Actions include `count`, `collect`, `take`, and `reduce`. The final catalog run processed the canonical CSV; 91,372 valid records passed the altitude filter, with DEB 28,988, PAY 55,016, R/B 6,331, and UNK 1,037.
 
 ## 6. Spark concepts
 
-The real-data run used two partitions and printed actual `toDebugString` lineage containing the source HadoopRDD, repartition, map, flatMap, filter, and cached partitions. The printed DAG explains the cached branch and aggregation branches. `cache()` was demonstrated by repeated actions and cached partition reporting.
+The final run used four partitions and printed actual `toDebugString` lineage containing the source HadoopRDD, repartition, map, flatMap, filter, and cached partitions. The printed DAG explains the persisted branch and aggregation branches. `persist()` was demonstrated by repeated actions and cached partition reporting.
 
 A disposable fixture showed one task retry and recomputation: attempt 0 failed, attempt 1 succeeded, and the recovered sum was 36. This is task retry evidence, not machine or executor recovery.
 

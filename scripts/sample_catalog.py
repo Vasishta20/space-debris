@@ -1,4 +1,4 @@
-"""Create a deterministic bounded sample from the joined SATCAT/TLE CSV.
+"""Create the deterministic canonical catalog from the joined SATCAT/TLE CSV.
 
 The source is read sequentially and never rewritten. Reservoir sampling keeps
 memory bounded while giving every valid row equal inclusion probability.

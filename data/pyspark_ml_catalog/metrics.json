@@ -1,7 +1,7 @@
 {
   "task": "SATCAT OBJECT_TYPE classification",
   "collision_risk_model": false,
-  "input": "/mnt/c/space-debris-collision-risk-output/project/data/joined_object_type_100k.csv",
+  "input": "/mnt/c/space-debris-collision-risk-output/project/data/review3_catalog.csv",
   "rows": 100000,
   "unique_norad_ids_in_sample": 26261,
   "features": [

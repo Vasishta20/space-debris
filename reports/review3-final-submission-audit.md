@@ -12,13 +12,13 @@ This audit uses the attached Review 3 instructions and rubric only. Hive, Cassan
 |---|---|---|---|
 | Real-world dataset selected and described | PASS | `submission/project-report.md` §4; `data/satcat_clean.json`; `reports/eda/eda.json` | Add team metadata if required by the institution. |
 | Problem/application is meaningful | PASS | `submission/project-report.md` §§1–3; `submission/review3-slide-deck.md` slides 1–2 | None for rubric evidence. |
-| Scala/Spark RDD created from dataset | PASS (bounded) | `phase-2b/spark-rdd/src/main/scala/org/course/spacedebris/rdd/RddDemo.scala`; `submission/evidence/scala-rdd-real-satcat-sample-20261015.log` | None. The run is intentionally a 100-row sample derived from real Parquet, not the 6 GB input. |
+| Scala/Spark RDD created from dataset | PASS (bounded) | `phase-2b/spark-rdd/src/main/scala/org/course/spacedebris/rdd/RddAnalysis.scala`; `submission/evidence/scala-rdd-catalog-final.log` | Final command reads the single canonical catalog and reports 91,372 valid rows, four partitions, key-value category aggregation, lineage, DAG, and persistence. |
 | At least three meaningful transformations | PASS | Source and real-data log: `repartition`, `map`, `flatMap`, `filter`, `reduceByKey`, `distinct` | None. |
 | At least two actions | PASS | Real-data log shows `count`, `collect`, `take`, and `reduce` outputs | None. |
 | Key-value RDD operations | PASS | `reduceByKey`/sorted category output in source and log | None. |
 | Partition count | PASS | Real-data log: requested/before/after = 2 | None. |
 | RDD lineage and DAG explanation | PASS | `toDebugString` and `dag=` lines in `submission/evidence/scala-rdd-real-satcat-sample-20261015.log`; report §6 | None. |
-| Cache/persist demonstrated | PASS | `valid_before_cache`, `valid_after_cache`, and cached partitions in real-data log | None. |
+| Cache/persist demonstrated | PASS | `storage_level`, cached partitions, and repeated actions in `submission/evidence/scala-rdd-review3-catalog-final.log` | None. |
 | Fault tolerance explained | PASS with scope limitation | `submission/evidence/fault-tolerance.log`; report §6; `submission/review3-slide-deck.md` slide 6 | Evidence is bounded task retry/recomputation only; do not describe it as machine recovery. |
 | PySpark feature preparation | PASS | `scripts/pyspark_ml_object_type.py`; `data/pyspark_ml_validation_20261015/metrics.json`; report §7 | None for object-type task. |
 | Train/test split | PASS | Metrics JSON: seed 42, 51,027 train and 17,102 test rows | None. |
@@ -27,7 +27,7 @@ This audit uses the attached Review 3 instructions and rubric only. Hive, Cassan
 | At least three meaningful charts | PASS | `reports/eda/apogee_hist.png`, `perigee_hist.png`, `inclination_hist.png`, `object_type_counts.png`; `reports/eda/eda.json` | None. |
 | Presentation is complete and ≤12 slides | PASS | `submission/review3-slide-deck.md`: exactly 12 numbered slide headings, required flow, actual metrics/charts | Add team/register numbers and institution details before submission. |
 | Project report follows required structure | PARTIAL | `submission/project-report.md` contains title, introduction, problem, objectives, dataset, methodology, Scala/Spark, PySpark ML, visualization, results, conclusion, references, evidence | Add team/department/institution fields and render/check the final document against the instructor's recommended 15–20 page format if a PDF/DOCX is required. |
-| Report recommended length | UNVERIFIED | Markdown report is complete but page count depends on rendering | Render to the required submission format and verify 15–20 pages; do not pad with unsupported claims. |
+| Report recommended length | PARTIAL | `submission/project-report.pdf` is rendered and validated at 8 pages | Recommended 15–20 pages is not met; add only source-backed content if the instructor requires that length. |
 | Reported metrics/results backed by execution evidence | PASS | EDA JSON/PNGs; PySpark metrics JSON and WSL log; RDD logs; screening JSON; evidence index | None; preserve the referenced logs with submission. |
 
 ## Evidence-backed results

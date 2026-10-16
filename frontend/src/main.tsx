@@ -45,9 +45,9 @@ function App() {
     if (search.trim()) query.set('search', search.trim());
     if (category !== 'ALL') query.set('object_type', category);
     Promise.all([
-      get<CatalogSummary>('/api/catalog-100k/summary'),
+      get<CatalogSummary>('/api/catalog/summary'),
       get<Summary>('/api/summary'),
-      get<CatalogPage>(`/api/catalog-100k/objects?${query}`),
+      get<CatalogPage>(`/api/catalog/objects?${query}`),
       get<Eda>('/api/eda'),
       get<{items:Model[]}>('/api/models'),
       get<{items:Candidate[]}>('/api/close-approaches'),
@@ -83,7 +83,7 @@ function App() {
     </section>
 
     <section className="feature-grid" id="insights">
-      <article className="card category-card"><div className="section-head"><div><span className="eyebrow">At a glance</span><h2>What’s in the catalog?</h2></div><span className="soft-label">100k view</span></div><p className="card-intro">Each color represents a different kind of space object recorded in this view.</p><div className="bars">{categories.map(([name,count]) => <div className="bar-row" key={name}><div className="bar-label"><span><i className={`dot dot-${name.replace('/','-')}`} />{name}</span><b>{formatNumber(count)}</b></div><div className="bar-track"><span style={{width:`${Math.max(4, count / maxCategory * 100)}%`}} /></div></div>)}</div></article>
+      <article className="card category-card"><div className="section-head"><div><span className="eyebrow">At a glance</span><h2>What’s in the catalog?</h2></div><span className="soft-label">Catalog view</span></div><p className="card-intro">Each color represents a different kind of space object recorded in this view.</p><div className="bars">{categories.map(([name,count]) => <div className="bar-row" key={name}><div className="bar-label"><span><i className={`dot dot-${name.replace('/','-')}`} />{name}</span><b>{formatNumber(count)}</b></div><div className="bar-track"><span style={{width:`${Math.max(4, count / maxCategory * 100)}%`}} /></div></div>)}</div></article>
       <article className="card quality-card"><div className="section-head"><div><span className="eyebrow">Category guide</span><h2>How well does it sort?</h2></div><span className="soft-label green">Verified</span></div><div className="score-ring"><div><strong>{model ? `${(model.accuracy * 100).toFixed(0)}%` : '—'}</strong><span>overall match</span></div></div><div className="score-line"><span>Balanced score</span><b>{model ? `${(model.macro_f1 * 100).toFixed(0)}%` : '—'}</b></div><p className="card-footnote">This guide identifies object categories. It does not predict collision risk.</p></article>
     </section>
 

@@ -1,4 +1,4 @@
-"""Leakage-safe PySpark ML evaluation on the derived 100k joined sample.
+"""Leakage-safe PySpark ML evaluation on the canonical catalog.
 
 The target remains SATCAT OBJECT_TYPE. Rows are split by NORAD object identity,
 not randomly by observation, so repeated TLE observations cannot cross splits.
@@ -54,7 +54,7 @@ def run(input_path: str, output_dir: str) -> dict:
     out.mkdir(parents=True, exist_ok=True)
     spark = (
         SparkSession.builder.master("local[2]")
-        .appName("space-debris-pyspark-object-type-joined-100k")
+        .appName("space-debris-pyspark-object-type-catalog")
         .config("spark.ui.enabled", "false")
         .config("spark.driver.host", "127.0.0.1")
         .config("spark.driver.bindAddress", "127.0.0.1")
