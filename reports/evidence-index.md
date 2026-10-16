@@ -9,6 +9,7 @@
 | Parquet round trip | `data\satcat_clean.parquet`, `data\satcat_clean.json` | Verified |
 | PostgreSQL migration | `data\postgres-migration.json`, `data\postgres.log` | Verified |
 | EDA figures | `reports\eda\*.png` | Verified |
+| Executed visualization notebook | `notebooks\catalog_visualizations.ipynb`, `reports\eda\notebook\` | Executed successfully with the canonical catalog; category and orbital-feature visualizations plus summary JSON |
 | API/frontend report | `COMPLETION-REPORT.md` | Verified |
 | PySpark failure logs | `phase-2b\pyspark-smoke-repro*.log`, `pyspark-smoke-sparkhome-deps.log`, `pyspark-smoke-faulthandler.log`, `pyspark-spark-submit-final.log`, `pyspark-spark-submit-no-driver-python.log`, `pyspark-worker-diagnostic-final.log`, `pyspark-version-diagnostic.log` | Attempted but unresolved; worker still exits with EOF |
 | Alternative runtime inspection | `reports\pyspark-alternative-runtime-investigation.md`, `reports\pyspark-wsl-ml.md` | WSL2 setup and compatible runtime verified; native Windows failure remains documented |

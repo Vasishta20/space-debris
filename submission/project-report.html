@@ -84,7 +84,7 @@ mvn -f &quot;$module\pom.xml&quot; &quot;-Dmaven.repo.local=$base\phase-2b\m2&qu
 <p>Class-level F1 values are DEB 0.754435, PAY 0.610807, R/B 0.038328, and UNK 0.000000. Model reload prediction equivalence is recorded as true.</p>
 <p>The target is SATCAT <code>OBJECT_TYPE</code> classification. It is not collision risk, conjunction outcome, collision probability, or a validated orbital-risk model. The separate candidate prioritization heuristic uses miss distance and relative velocity and is not used as a training label.</p>
 <h2>8. Visualization</h2>
-<p>Four genuine charts were generated from the 68,129-row SATCAT processing run:</p>
+<p>The executable notebook <code>notebooks\catalog_visualizations.ipynb</code> generates genuine descriptive charts from the canonical catalog. Its outputs are preserved under <code>reports\eda\notebook\</code>. The existing EDA run also produced four charts from the cleaned SATCAT processing run:</p>
 <p class="chart-wrap"><img class="chart" alt="Apogee distribution" src="../reports/eda/apogee_hist.png"></p>
 <p class="chart-wrap"><img class="chart" alt="Perigee distribution" src="../reports/eda/perigee_hist.png"></p>
 <p class="chart-wrap"><img class="chart" alt="Inclination distribution" src="../reports/eda/inclination_hist.png"></p>

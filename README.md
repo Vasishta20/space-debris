@@ -12,6 +12,7 @@ repository and its large joined dataset are not modified or copied.
 - `frontend/` — React + TypeScript dashboard using live API responses.
 - `data/` — the canonical catalog, model evidence, charts, and bounded screening outputs.
 - `submission/` — project report, PDF, presentation, and evidence logs.
+- `notebooks/` — executable catalog visualization notebook.
 
 ## Run
 
@@ -24,6 +25,12 @@ $root = 'C:\space-debris-collision-risk-output\project'
 The bounded pipeline reads `data/raw/satcat_clean.csv` from the original repository (about 6.9 MB), not the 6 GB joined input. TLE screening downloads one bounded CelesTrak group into this output directory and records its source URL.
 
 The classifier predicts SATCAT `OBJECT_TYPE`; it is not a collision probability model and must not be presented as one. Close-approach screening is a small, deterministic demonstration over downloaded TLEs and does not replace high-fidelity conjunction assessment.
+
+## Notebook visualizations
+
+Open `notebooks/catalog_visualizations.ipynb` in Jupyter Notebook or JupyterLab.
+It reads `data/review3_catalog.csv` and writes genuine charts and summary data
+to `reports/eda/notebook/`.
 
 ## Scala RDD execution
 

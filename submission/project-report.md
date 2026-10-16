@@ -137,7 +137,7 @@ The target is SATCAT `OBJECT_TYPE` classification. It is not collision risk, con
 
 ## 8. Visualization
 
-Four genuine charts were generated from the 68,129-row SATCAT processing run:
+The executable notebook `notebooks\catalog_visualizations.ipynb` generates genuine descriptive charts from the canonical catalog. Its outputs are preserved under `reports\eda\notebook\`. The existing EDA run also produced four charts from the cleaned SATCAT processing run:
 
 ![Apogee distribution](../reports/eda/apogee_hist.png)
 
