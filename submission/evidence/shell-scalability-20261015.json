@@ -1,0 +1,73 @@
+{
+  "input": "C:\\space-debris-collision-risk-output\\project\\data\\satcat_clean.parquet",
+  "input_altitude_values": 68129,
+  "threshold_km": 50.0,
+  "shell_width_km": 50.0,
+  "epochs": 7,
+  "cases": [
+    {
+      "objects_per_epoch": 60,
+      "epochs": 7,
+      "states": 420,
+      "brute_force_pairs_per_epoch": 1770,
+      "shell_comparisons_per_epoch": 261,
+      "legacy_candidates": 0,
+      "streaming_candidates": 0,
+      "identity_match": true,
+      "legacy_elapsed_seconds": 0.019158300000071904,
+      "streaming_elapsed_seconds": 0.01625190000004295,
+      "legacy_peak_tracemalloc_bytes": 306840,
+      "streaming_peak_tracemalloc_bytes": 64496,
+      "shell_count": 26,
+      "largest_shell_occupancy": 10,
+      "candidate_pair_reduction_estimate": 0.8525423728813559
+    },
+    {
+      "objects_per_epoch": 240,
+      "epochs": 7,
+      "states": 1680,
+      "brute_force_pairs_per_epoch": 28680,
+      "shell_comparisons_per_epoch": 5416,
+      "legacy_candidates": 0,
+      "streaming_candidates": 0,
+      "identity_match": true,
+      "legacy_elapsed_seconds": 0.1645965999996406,
+      "streaming_elapsed_seconds": 0.148878799999693,
+      "legacy_peak_tracemalloc_bytes": 1123968,
+      "streaming_peak_tracemalloc_bytes": 158144,
+      "shell_count": 41,
+      "largest_shell_occupancy": 43,
+      "candidate_pair_reduction_estimate": 0.8111576011157601
+    },
+    {
+      "objects_per_epoch": 960,
+      "epochs": 7,
+      "states": 6720,
+      "brute_force_pairs_per_epoch": 460320,
+      "shell_comparisons_per_epoch": 114990,
+      "legacy_candidates": 462,
+      "streaming_candidates": 462,
+      "identity_match": true,
+      "legacy_elapsed_seconds": 2.9638537000000724,
+      "streaming_elapsed_seconds": 3.2355695999999625,
+      "legacy_peak_tracemalloc_bytes": 4254312,
+      "streaming_peak_tracemalloc_bytes": 928481,
+      "shell_count": 87,
+      "largest_shell_occupancy": 179,
+      "candidate_pair_reduction_estimate": 0.7501955161626694
+    }
+  ],
+  "catalog_estimate": {
+    "objects_per_epoch": 68129,
+    "states": 476903,
+    "brute_force_pairs_per_epoch": 2320746256,
+    "brute_force_pairs_all_epochs": 16245223792,
+    "note": "Arithmetic estimate only; no full-catalog shell or brute-force job executed."
+  },
+  "algorithmic_limits": [
+    "Shell screening retains all states in memory and groups by exact epoch.",
+    "Work is proportional to same/adjacent-shell occupancy, not guaranteed linear.",
+    "Shell pruning is safe for this radial prefilter only when shell width is at least the distance threshold; final Cartesian distance remains authoritative.",
+    "The current generic function has no streaming spill or distributed partitioning; full-catalog execution requires a separate resource-approved design."
+  ]
+}

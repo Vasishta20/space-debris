@@ -1,0 +1,29 @@
+{
+  "source": "D:\\Projects\\space-debris-collision-risk\\data\\raw\\satcat_clean.csv",
+  "output": "C:\\space-debris-collision-risk-output\\project\\data\\satcat_clean.parquet",
+  "rows_written": 68129,
+  "rows_read": 68129,
+  "columns": [
+    "OBJECT_NAME",
+    "OBJECT_ID",
+    "NORAD_CAT_ID",
+    "OBJECT_TYPE",
+    "OPS_STATUS_CODE",
+    "OWNER",
+    "LAUNCH_DATE",
+    "LAUNCH_SITE",
+    "DECAY_DATE",
+    "PERIOD",
+    "INCLINATION",
+    "APOGEE",
+    "PERIGEE",
+    "RCS",
+    "DATA_STATUS_CODE",
+    "ORBIT_CENTER",
+    "ORBIT_TYPE"
+  ],
+  "schema_valid": true,
+  "elapsed_seconds": 0.29174570000031963,
+  "format": "parquet",
+  "engine": "pyarrow"
+}

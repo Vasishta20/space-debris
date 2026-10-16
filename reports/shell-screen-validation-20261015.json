@@ -1,0 +1,40 @@
+{
+  "source": "C:\\space-debris-collision-risk-output\\project\\data\\starlink.tle",
+  "objects": 60,
+  "epochs": 7,
+  "states": 420,
+  "reference_epoch_utc": "2026-10-14T05:50:00Z",
+  "step_minutes": 10,
+  "threshold_km": 50.0,
+  "shell_width_km": 50.0,
+  "altitude_definition": "geocentric TEME radius minus 6378.137 km",
+  "boundary_definition": "half-open [n*50,(n+1)*50); exact boundary belongs to higher shell",
+  "brute_force_candidates": 1,
+  "bucketed_candidates": 1,
+  "missing_from_bucketed": [],
+  "extra_in_bucketed": [],
+  "identity_match": true,
+  "result_match": true,
+  "candidates": [
+    {
+      "object_a": "STARLINK-1216",
+      "norad_a": 45185,
+      "object_b": "STARLINK-1246",
+      "norad_b": 45235,
+      "epoch_utc": "2026-10-14T05:50:00Z",
+      "distance_km": 19.837271672114348,
+      "relative_velocity_km_s": 0.2160070951969289,
+      "coordinate_frame": "TEME",
+      "distance_units": "km",
+      "velocity_units": "km/s",
+      "shell_width_km": 50.0,
+      "shell_a": 8,
+      "shell_b": 8
+    }
+  ],
+  "elapsed_seconds": 0.019140900000365946,
+  "limitations": [
+    "bounded 60-object, seven-epoch sample",
+    "TEME geocentric altitude is a pruning reference, not an operational conjunction geometry model"
+  ]
+}

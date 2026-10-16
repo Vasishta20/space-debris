@@ -1,0 +1,15 @@
+{
+  "dsn": "postgresql://postgres@127.0.0.1:55432/postgres",
+  "counts": {
+    "objects": 68129,
+    "orbital_stats": 4,
+    "screening_runs": 1,
+    "close_approaches": 1,
+    "model_metrics": 1
+  },
+  "representative": {
+    "norad_cat_id": 1,
+    "object_type": "R/B"
+  },
+  "sqlite_source": "C:\\space-debris-collision-risk-output\\project\\data\\analytics.sqlite3"
+}

@@ -1,0 +1,9 @@
+{
+  "method": "unsupervised Spark MLlib exploratory clustering",
+  "not_a_collision_probability": true,
+  "not_a_supervised_collision_model": true,
+  "input_rows": 1,
+  "validation_errors": [],
+  "status": "not_ready_for_fit",
+  "reason": "at least 3 independent candidates are required; no rows were duplicated"
+}

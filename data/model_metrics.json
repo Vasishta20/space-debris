@@ -1,0 +1,53 @@
+{
+  "model_name": "logistic_regression_object_type",
+  "target": "OBJECT_TYPE",
+  "accuracy": 0.5705982504549991,
+  "macro_f1": 0.4279902049789402,
+  "rows_used": 68129,
+  "classes": [
+    "DEB",
+    "PAY",
+    "R/B",
+    "UNK"
+  ],
+  "classification_report": {
+    "DEB": {
+      "precision": 0.7654014876978829,
+      "recall": 0.46436010182828047,
+      "f1-score": 0.5780338494778537,
+      "support": 8642.0
+    },
+    "PAY": {
+      "precision": 0.7856906807666887,
+      "recall": 0.7088550983899821,
+      "f1-score": 0.7452978056426333,
+      "support": 6708.0
+    },
+    "R/B": {
+      "precision": 0.2675974403723095,
+      "recall": 0.5599513085818625,
+      "f1-score": 0.3621334382995473,
+      "support": 1643.0
+    },
+    "UNK": {
+      "precision": 0.013478260869565217,
+      "recall": 0.775,
+      "f1-score": 0.026495726495726495,
+      "support": 40.0
+    },
+    "accuracy": 0.5705982504549991,
+    "macro avg": {
+      "precision": 0.4580419674266115,
+      "recall": 0.6270416272000312,
+      "f1-score": 0.4279902049789402,
+      "support": 17033.0
+    },
+    "weighted avg": {
+      "precision": 0.7236079650228696,
+      "recall": 0.5705982504549991,
+      "f1-score": 0.6217854327261422,
+      "support": 17033.0
+    }
+  },
+  "elapsed_seconds": 2.157767699998658
+}

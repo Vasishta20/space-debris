@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+numpy
+pandas
+scikit-learn
+matplotlib
+sgp4==2.27
+pytest
+httpx
+pyarrow
+psycopg[binary]

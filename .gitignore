@@ -1,0 +1,33 @@
+# Local environments and dependency caches
+.venv/
+.venv-*/
+tools/
+frontend/node_modules/
+frontend/dist/
+__pycache__/
+*/__pycache__/
+.pytest_cache/
+.mypy_cache/
+
+# Local runtime state
+*.sqlite3
+*.log
+edge-pdf-profile*/
+chrome-preview-profile*/
+
+# Original and derived large tabular artifacts
+data/raw/
+data/*.parquet
+data/postgres/
+data/pyspark_ml_joined_100k/model/
+data/pyspark_ml_joined_100k/preprocessor/
+
+# Spark marker/checksum files; retain the actual 100k prediction CSV
+data/pyspark_ml_joined_100k/predictions_csv/.*
+data/pyspark_ml_joined_100k/predictions_csv/_SUCCESS
+
+# Keep the C: 100k sample and its metrics explicitly tracked.
+!data/joined_object_type_100k.csv
+!data/joined_object_type_100k_metadata.json
+!data/pyspark_ml_joined_100k/metrics.json
+!data/pyspark_ml_joined_100k/predictions_csv/part-*.csv

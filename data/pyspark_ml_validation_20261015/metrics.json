@@ -1,0 +1,76 @@
+{
+  "task": "SATCAT OBJECT_TYPE classification",
+  "collision_risk_model": false,
+  "spark_version": "3.5.1",
+  "pyspark_version": "3.5.1",
+  "input": "/mnt/c/space-debris-collision-risk-output/project/data/satcat_clean.parquet",
+  "feature_columns": [
+    "PERIOD",
+    "INCLINATION",
+    "APOGEE",
+    "PERIGEE",
+    "RCS"
+  ],
+  "target_column": "OBJECT_TYPE",
+  "rows": 68129,
+  "train_rows": 51027,
+  "test_rows": 17102,
+  "random_seed": 42,
+  "accuracy": 0.6638989591860601,
+  "macro_f1": 0.6275827871279532,
+  "class_metrics": [
+    {
+      "label": "DEB",
+      "support": 8752,
+      "precision": 0.6795165277904954,
+      "recall": 0.8479204753199269,
+      "f1": 0.7544350124536167
+    },
+    {
+      "label": "PAY",
+      "support": 6658,
+      "precision": 0.6380890052356021,
+      "recall": 0.585761489936918,
+      "f1": 0.610806577916993
+    },
+    {
+      "label": "R/B",
+      "support": 1653,
+      "precision": 0.4782608695652174,
+      "recall": 0.019963702359346643,
+      "f1": 0.038327526132404185
+    },
+    {
+      "label": "UNK",
+      "support": 39,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  ],
+  "overall_class_counts": {
+    "R/B": 6571,
+    "UNK": 160,
+    "DEB": 34568,
+    "PAY": 26830
+  },
+  "train_class_counts": {
+    "R/B": 4918,
+    "UNK": 121,
+    "DEB": 25816,
+    "PAY": 20172
+  },
+  "test_class_counts": {
+    "R/B": 1653,
+    "UNK": 39,
+    "DEB": 8752,
+    "PAY": 6658
+  },
+  "majority_class_baseline": {
+    "label": "DEB",
+    "accuracy": 0.5117530113437025,
+    "macro_f1": 0.16925814187359792
+  },
+  "reload_prediction_equivalence": true,
+  "preprocessing": "training-fitted median imputation, vector assembly, training-fitted label indexer"
+}

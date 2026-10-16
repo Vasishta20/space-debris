@@ -1,0 +1,28 @@
+{
+  "source": "D:\\Projects\\space-debris-collision-risk\\data\\raw\\tle_2023_2024_satcat_joined_clean.csv",
+  "output": "C:\\space-debris-collision-risk-output\\project\\data\\joined_object_type_100k.csv",
+  "requested_rows": 100000,
+  "sample_rows": 100000,
+  "source_valid_rows_seen": 29136654,
+  "source_rows_rejected": 0,
+  "random_seed": 20261016,
+  "sampling": "one-pass uniform reservoir sampling over valid rows",
+  "source_label_counts": {
+    "PAY": 17778143,
+    "DEB": 8672357,
+    "R/B": 2389188,
+    "UNK": 194237,
+    "UNKNOWN": 102729
+  },
+  "sample_label_counts": {
+    "DEB": 29723,
+    "PAY": 60993,
+    "R/B": 8237,
+    "UNK": 689,
+    "UNKNOWN": 358
+  },
+  "source_unique_norad_ids_observed": 31937,
+  "sample_unique_norad_ids": 26261,
+  "elapsed_seconds": 184.86104630000045,
+  "original_source_modified": false
+}

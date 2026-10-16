@@ -1,0 +1,29 @@
+{
+  "source_screening": "data\\screening.json",
+  "method": "deterministic physical-feature prioritization",
+  "not_a_collision_probability": true,
+  "threshold_km": 50.0,
+  "candidates": [
+    {
+      "object_a": "STARLINK-1216",
+      "norad_a": 45185,
+      "object_b": "STARLINK-1246",
+      "norad_b": 45235,
+      "epoch_utc": "2026-10-14T05:50:00Z",
+      "distance_km": 19.837271672114348,
+      "relative_velocity_km_s": 0.2160070951969289,
+      "coordinate_frame": "TEME",
+      "tle_a_line1": "1 45185U 20012H   26285.77660927  .00031622  00000+0  54374-3 0  9994",
+      "tle_a_line2": "2 45185  53.1504  98.6160 0000633  57.8369 302.2702 15.50861863368302",
+      "tle_b_line1": "1 45235U 20012BK  26285.77200452  .00055681  00000+0  11344-2 0  9993",
+      "tle_b_line2": "2 45235  53.1496 100.5996 0002360 221.9223 138.1604 15.45725715368351",
+      "prioritization_score": 0.657476068,
+      "distance_component": 0.603254567,
+      "velocity_component": 0.783992905,
+      "priority_band": "medium",
+      "score_definition": "0.7*(1-distance_km/threshold_km)+0.3*(1-relative_velocity_km_s/1.0), clipped at zero",
+      "score_units": "dimensionless heuristic",
+      "is_collision_probability": false
+    }
+  ]
+}

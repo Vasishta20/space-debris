@@ -1,0 +1,44 @@
+{
+  "task": "SATCAT OBJECT_TYPE classification",
+  "collision_risk_model": false,
+  "spark_version": "3.5.1",
+  "pyspark_version": "3.5.1",
+  "input": "/mnt/c/space-debris-collision-risk-output/project/data/satcat_clean.parquet",
+  "feature_columns": [
+    "PERIOD",
+    "INCLINATION",
+    "APOGEE",
+    "PERIGEE",
+    "RCS"
+  ],
+  "target_column": "OBJECT_TYPE",
+  "rows": 68129,
+  "train_rows": 51027,
+  "test_rows": 17102,
+  "random_seed": 42,
+  "accuracy": 0.6638989591860601,
+  "macro_f1": 0.6275827871279532,
+  "class_metrics": [
+    {
+      "label": "DEB",
+      "support": 8752,
+      "recall": 0.8479204753199269
+    },
+    {
+      "label": "PAY",
+      "support": 6658,
+      "recall": 0.585761489936918
+    },
+    {
+      "label": "R/B",
+      "support": 1653,
+      "recall": 0.019963702359346643
+    },
+    {
+      "label": "UNK",
+      "support": 39,
+      "recall": 0.0
+    }
+  ],
+  "preprocessing": "training-fitted median imputation, vector assembly, training-fitted label indexer"
+}

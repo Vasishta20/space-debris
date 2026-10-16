@@ -1,0 +1,16 @@
+{
+  "rows": 68129,
+  "object_types": {
+    "R/B": 6571,
+    "PAY": 26830,
+    "DEB": 34568,
+    "UNK": 160
+  },
+  "missing": {
+    "APOGEE": 0,
+    "PERIGEE": 0,
+    "INCLINATION": 0,
+    "RCS": 0
+  },
+  "elapsed_seconds": 1.3052467000015895
+}

@@ -1,0 +1,173 @@
+{
+  "task": "SATCAT OBJECT_TYPE classification",
+  "collision_risk_model": false,
+  "input": "/mnt/c/space-debris-collision-risk-output/project/data/joined_object_type_100k.csv",
+  "rows": 100000,
+  "unique_norad_ids_in_sample": 26261,
+  "features": [
+    "inclination",
+    "raan",
+    "eccentricity",
+    "arg_perigee",
+    "mean_anomaly",
+    "mean_motion",
+    "mean_motion_dot",
+    "bstar",
+    "altitude_km",
+    "period_min"
+  ],
+  "target": "OBJECT_TYPE (UNKNOWN normalized to UNK)",
+  "split": "deterministic NORAD-ID hash split: train buckets 0-6, validation 7-8, test 9",
+  "train_rows": 70315,
+  "validation_rows": 19660,
+  "test_rows": 10025,
+  "spark_version": "3.5.1",
+  "pyspark_version": "3.5.1",
+  "python_version": "3.12.3",
+  "random_seed": 20261016,
+  "class_weights": {
+    "R/B": 3.1035928672316384,
+    "UNK": 22.653028350515463,
+    "DEB": 0.8456200692707331,
+    "PAY": 0.4079826861930513
+  },
+  "train_class_counts": {
+    "R/B": 5664,
+    "UNK": 776,
+    "DEB": 20788,
+    "PAY": 43087
+  },
+  "test_class_counts": {
+    "R/B": 832,
+    "UNK": 123,
+    "DEB": 2931,
+    "PAY": 6139
+  },
+  "selected_parameters": {
+    "regParam": 0.0,
+    "elasticNetParam": 0.0
+  },
+  "validation_metrics": {
+    "accuracy": 0.5230417090539166,
+    "macro_f1": 0.5940840541081739,
+    "weighted_precision": 0.7083994219058084,
+    "weighted_recall": 0.5230417090539166,
+    "class_metrics": [
+      {
+        "label": "PAY",
+        "support": 11767,
+        "precision": 0.8276587353753122,
+        "recall": 0.5350556641454917,
+        "f1": 0.6499432228760194
+      },
+      {
+        "label": "DEB",
+        "support": 6004,
+        "precision": 0.6052332195676906,
+        "recall": 0.5316455696202531,
+        "f1": 0.5660578116687356
+      },
+      {
+        "label": "R/B",
+        "support": 1741,
+        "precision": 0.31713665943600866,
+        "recall": 0.4198736358414704,
+        "f1": 0.36134453781512604
+      },
+      {
+        "label": "UNK",
+        "support": 148,
+        "precision": 0.014304872597228431,
+        "recall": 0.43243243243243246,
+        "f1": 0.027693639117265252
+      }
+    ]
+  },
+  "test_metrics": {
+    "accuracy": 0.5177057356608479,
+    "macro_f1": 0.5896565892484495,
+    "weighted_precision": 0.7076015127235601,
+    "weighted_recall": 0.5177057356608479,
+    "class_metrics": [
+      {
+        "label": "PAY",
+        "support": 6139,
+        "precision": 0.8160776505724241,
+        "recall": 0.534126079165988,
+        "f1": 0.6456630894949297
+      },
+      {
+        "label": "DEB",
+        "support": 2931,
+        "precision": 0.6175613816063255,
+        "recall": 0.5063118389628113,
+        "f1": 0.5564304461942257
+      },
+      {
+        "label": "R/B",
+        "support": 832,
+        "precision": 0.3253119429590018,
+        "recall": 0.4387019230769231,
+        "f1": 0.37359263050153535
+      },
+      {
+        "label": "UNK",
+        "support": 123,
+        "precision": 0.0249798549556809,
+        "recall": 0.5040650406504065,
+        "f1": 0.04760076775431862
+      }
+    ]
+  },
+  "majority_baseline": {
+    "label": "PAY",
+    "accuracy": 0.6123690773067332,
+    "macro_f1": 0.18989730264785945
+  },
+  "full_prediction_rows": 100000,
+  "tuning_candidates": [
+    {
+      "regParam": 0.0,
+      "elasticNetParam": 0.0,
+      "validation_accuracy": 0.5230417090539166,
+      "validation_macro_f1": 0.5940840541081739
+    },
+    {
+      "regParam": 0.0,
+      "elasticNetParam": 0.5,
+      "validation_accuracy": 0.5230417090539166,
+      "validation_macro_f1": 0.5940840541081739
+    },
+    {
+      "regParam": 0.01,
+      "elasticNetParam": 0.0,
+      "validation_accuracy": 0.44547304170905394,
+      "validation_macro_f1": 0.523180870114548
+    },
+    {
+      "regParam": 0.01,
+      "elasticNetParam": 0.5,
+      "validation_accuracy": 0.42085452695829095,
+      "validation_macro_f1": 0.49502824048070215
+    },
+    {
+      "regParam": 0.1,
+      "elasticNetParam": 0.0,
+      "validation_accuracy": 0.40666327568667343,
+      "validation_macro_f1": 0.4851599257711215
+    },
+    {
+      "regParam": 0.1,
+      "elasticNetParam": 0.5,
+      "validation_accuracy": 0.3520854526958291,
+      "validation_macro_f1": 0.3999867645389383
+    }
+  ],
+  "leakage_controls": [
+    "derived sample fixed before modeling",
+    "train-only imputation/scaling/label indexing",
+    "NORAD-ID group split",
+    "validation-only hyperparameter selection",
+    "test used once for final metrics"
+  ]
+}

@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.VectorAssembler","timestamp":1792085610069,"sparkVersion":"3.5.1","uid":"VectorAssembler_d94bac273d0d","paramMap":{"inputCols":["PERIOD_imputed","INCLINATION_imputed","APOGEE_imputed","PERIGEE_imputed","RCS_imputed"],"outputCol":"features"},"defaultParamMap":{"handleInvalid":"error","outputCol":"VectorAssembler_d94bac273d0d__output"}}

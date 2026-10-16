@@ -1,0 +1,99 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Space Debris Collision Risk Analytics</title>
+<style>
+@page { size: A4; margin: 18mm 17mm 18mm 17mm; @bottom-right { content: counter(page); color:#64748b; font-size:9pt; } }
+* { box-sizing:border-box; } body { font-family: "Segoe UI", Arial, sans-serif; color:#172033; line-height:1.42; font-size:10.5pt; }
+.cover { height:245mm; display:flex; flex-direction:column; justify-content:center; page-break-after:always; }
+.cover h1 { color:#0f3d5e; font-size:30pt; line-height:1.12; margin:0 0 12mm; } .cover h2 { color:#147d92; font-size:17pt; margin:0 0 18mm; }
+.meta { border-left:4px solid #f59e0b; padding:5mm 7mm; background:#f8fafc; color:#334155; font-size:11pt; }
+h1 { color:#0f3d5e; font-size:22pt; border-bottom:2px solid #f59e0b; padding-bottom:3mm; margin-top:5mm; }
+h2 { color:#0f6174; font-size:16pt; margin-top:9mm; page-break-after:avoid; } h3 { color:#155e75; font-size:12pt; page-break-after:avoid; }
+p { margin:3mm 0; } blockquote { border-left:4px solid #14b8a6; background:#f0fdfa; padding:3mm 5mm; margin:5mm 0; }
+code { font-family:Consolas, monospace; background:#eef2f7; padding:0.5mm 1mm; border-radius:2px; }
+pre { background:#102a43; color:#e6f1ff; padding:4mm; border-radius:4px; white-space:pre-wrap; font:8.5pt Consolas, monospace; break-inside:avoid; }
+table { width:100%; border-collapse:collapse; margin:5mm 0; font-size:9.5pt; break-inside:avoid; } th { background:#0f6174; color:white; text-align:left; } th,td { padding:2.4mm; border:0.3mm solid #cbd5e1; vertical-align:top; } tr:nth-child(even) { background:#f8fafc; }
+ul,ol { margin-top:2mm; } li { margin:1.5mm 0; } a { color:#075985; } .chart-wrap { text-align:center; page-break-inside:avoid; }
+img.chart { max-width:100%; max-height:92mm; object-fit:contain; display:block; margin:4mm auto; }
+</style></head><body><section class="cover"><h1>Space Debris Collision Risk Analytics</h1><h2>Review 3 Project Report</h2><div class="meta"><div><strong>Course:</strong> 23CSE352 – Big Data Analytics</div><div><strong>Review:</strong> Project Review 3 – Apache Spark</div><div><strong>Team member:</strong> Kireeti - CB.SC.U4CSE23057</div><div><strong>Additional team members/register numbers:</strong> [TO SUPPLY, if applicable]</div><div><strong>Department:</strong> [TO SUPPLY: department name]</div><div><strong>Institution:</strong> Amrita Vishwa Vidyapeetham</div><div><strong>Faculty guide:</strong> [TO SUPPLY: guide name]</div><div><strong>Submission workspace:</strong> <code>C:\space-debris-collision-risk-output\project</code></div></div></section><h2>1. Introduction</h2>
+<p>Space debris analytics combines catalog ingestion, orbital-feature processing, propagation, and close-approach screening. The project demonstrates a bounded local-first workflow using a real SATCAT catalog, a CelesTrak TLE sample, Scala/Spark RDD processing, PySpark ML, Python visualizations, and a web-facing results layer. The implementation intentionally distinguishes screening candidates from confirmed collisions and from calibrated risk probabilities.</p>
+<h2>2. Problem Statement</h2>
+<p>Large orbital catalogs contain heterogeneous objects, incomplete metadata, and orbital attributes that require validation before analysis. A practical system must process real records, expose useful orbital summaries, identify bounded close-approach candidates, and evaluate a reproducible machine-learning task without inventing collision labels. Review 3 evaluates the Spark RDD concepts, PySpark modelling workflow, visualization, and communication of results.</p>
+<h2>3. Objectives</h2>
+<ol><li>Ingest and validate a real-world SATCAT orbital catalog.</li><li>Demonstrate Scala/Spark RDD transformations, actions, key/value operations, partitions, lineage, DAG structure, persistence, and fault-tolerance reasoning.</li><li>Prepare real catalog features and evaluate a reproducible PySpark model.</li><li>Produce meaningful charts and communicate the workflow, results, and limitations.</li></ol>
+<h2>4. Dataset Description</h2>
+<p>The primary catalog is the cleaned SATCAT file recorded in <code>data\satcat_clean.json</code> and represented analytically by <code>data\satcat_clean.parquet</code>. It contains 68,129 records and fields including object name, object ID, NORAD catalog ID, object type, owner, launch/decay dates, period, inclination, apogee, perigee, radar cross-section, orbit center, and orbit type. The source is the original project SATCAT file at <code>D:\Projects\space-debris-collision-risk\data\raw\satcat_clean.csv</code>; it was read for bounded processing but not modified.</p>
+<p>The object-type counts from the actual EDA run are:</p>
+<table><thead><tr><th>Object type</th><th>Records</th></tr></thead><tbody>
+<tr><td>DEB</td><td>34,568</td></tr>
+<tr><td>PAY</td><td>26,830</td></tr>
+<tr><td>R/B</td><td>6,571</td></tr>
+<tr><td>UNK</td><td>160</td></tr>
+</tbody></table>
+<p>The approximately 6 GB joined TLE/SATCAT input remains preserved on D: and was not used in the bounded Spark demonstration. The separate TLE screening uses 60 real Starlink TLEs downloaded from the recorded CelesTrak URL, seven UTC epochs, and a ten-minute step.</p>
+<h2>5. Methodology and Workflow</h2>
+<pre><code>Real SATCAT catalog
+        ↓
+Validation and Parquet representation
+        ↓
+Scala/Spark RDD parsing, filtering, aggregation, lineage and persistence
+        ↓
+PySpark feature preparation and train/test split
+        ↓
+PySpark logistic regression for OBJECT_TYPE
+        ↓
+Held-out evaluation and baseline comparison
+        ↓
+Python EDA charts and bounded SGP4 candidate screening
+        ↓
+API/frontend evidence and documented limitations</code></pre>
+<p>The SGP4 screening is a separate bounded orbital demonstration. It uses TEME coordinates, kilometres for distance, km/s for relative velocity, a 50 km inclusive threshold, and preserved source TLE lines. Its output is a candidate close approach, not a collision or a probability.</p>
+<h2>6. Scala + Spark RDD Implementation</h2>
+<p>The RDD implementation is in <code>C:\space-debris-collision-risk-output\phase-2b\spark-rdd\src\main\scala\org\course\spacedebris\rdd\RddDemo.scala</code>. A 100-row sample was exported from the real cleaned SATCAT Parquet artifact to <code>real_satcat_sample.csv</code> for a bounded real-data run. The original deterministic fixture remains preserved separately.</p>
+<h3>RDD creation and transformations</h3>
+<p>The job creates an RDD using <code>SparkContext.textFile</code>, repartitions it, parses CSV records, expands parsed options with <code>flatMap</code>, and filters records to an altitude range of 200–2,000 km. The meaningful transformations are:</p>
+<ul><li><code>repartition</code> to control the requested partition count;</li><li><code>map(parseLine)</code> for validation and record construction;</li><li><code>flatMap</code> to remove invalid parse results and expand aliases;</li><li><code>filter</code> for the orbital altitude range;</li><li><code>reduceByKey</code> and <code>sortByKey</code> for category aggregation and deterministic ordering;</li><li><code>distinct</code> and <code>sortBy</code> for alias analysis.</li></ul>
+<h3>Actions and key/value operations</h3>
+<p>The job performs <code>count</code>, <code>collect</code>, <code>take</code>, and <code>reduce</code>. Category records are converted to <code>(category, 1)</code> pairs and aggregated using <code>reduceByKey</code>; the result is collected and sorted by key.</p>
+<h3>Actual real-data run</h3>
+<p>Command:</p>
+<pre><code>$module = &#x27;C:\space-debris-collision-risk-output\phase-2b\spark-rdd&#x27;
+$env:JAVA_HOME = &#x27;C:\space-debris-collision-risk-output\tools\jdk-17.0.20.1+1&#x27;
+$env:MAVEN_OPTS = &#x27;--add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=java.base/sun.security.action=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED&#x27;
+mvn -f &quot;$module\pom.xml&quot; compile exec:java &quot;-Dexec.mainClass=org.course.spacedebris.rdd.RddDemo&quot; &quot;-Dexec.args=$module\src\main\resources\real_satcat_sample.csv 2&quot; &quot;-Dexec.cleanupDaemonThreads=false&quot;</code></pre>
+<p>Observed output is preserved in <code>reports\scala-rdd-real-satcat-sample-20261015.log</code>:</p>
+<ul><li>100 input records; 66 records passed the altitude filter.</li><li>Two partitions before and after repartition.</li><li>Category counts: DEB 23, PAY 31, R/B 12.</li><li>Total filtered altitude: 36,173.5 km.</li><li>Actual <code>toDebugString</code> lineage includes HadoopRDD, textFile, repartition shuffle, map, flatMap, filter, and cached partitions.</li></ul>
+<h3>Partitions, lineage, DAG, persistence, and fault tolerance</h3>
+<p>The job reports two partitions. The actual lineage is preserved in the real-data log and the deterministic fixture log. The printed DAG explanation connects the source, repartition, parsing, filtering, cache, category branch, alias branch, and altitude reduction. <code>valid.cache()</code> is followed by a count before and after caching; the lineage reports cached partitions.</p>
+<p>The disposable fault fixture is separate from the real catalog and uses eight in-memory integers. Its preserved log shows partition 0 failing at attempt 0, succeeding at attempt 1, and recovered total 36 matching the independent baseline. This demonstrates local task retry/recomputation from lineage only; it does not demonstrate machine, executor, or production failure recovery.</p>
+<p>Evidence:</p>
+<ul><li><code>submission\evidence\scala-rdd-output.log</code></li><li><code>submission\evidence\scala-rdd-real-satcat-sample-20261015.log</code></li><li><code>submission\evidence\fault-tolerance.log</code></li><li><code>phase-2b\spark-rdd\src\main\scala\org\course\spacedebris\rdd\RddDemo.scala</code></li></ul>
+<h2>7. PySpark Machine Learning</h2>
+<p>The PySpark model is implemented in <code>scripts\pyspark_ml_object_type.py</code> and executed in the isolated WSL2 runtime with Spark/PySpark 3.5.1, Java 11.0.32, and Python 3.12.3.</p>
+<h3>Feature preparation</h3>
+<p>The model uses five numeric orbital/catalog features: <code>PERIOD</code>, <code>INCLINATION</code>, <code>APOGEE</code>, <code>PERIGEE</code>, and <code>RCS</code>. Median imputation is fitted on the training data, followed by vector assembly and training-fitted label indexing. Identifiers and the target are excluded from the feature vector.</p>
+<h3>Split, model, and evaluation</h3>
+<p>The reproducible split uses seed 42 with 51,027 training rows and 17,102 test rows. The model is logistic regression evaluated on held-out data. Actual results from <code>data\pyspark_ml_validation_20261015\metrics.json</code>:</p>
+<table><thead><tr><th>Metric</th><th>Result</th></tr></thead><tbody>
+<tr><td>Accuracy</td><td>0.663899</td></tr>
+<tr><td>Macro-F1</td><td>0.627583</td></tr>
+<tr><td>Majority baseline accuracy</td><td>0.511753</td></tr>
+<tr><td>Majority baseline macro-F1</td><td>0.169258</td></tr>
+</tbody></table>
+<p>Class-level F1 values are DEB 0.754435, PAY 0.610807, R/B 0.038328, and UNK 0.000000. Model reload prediction equivalence is recorded as true.</p>
+<p>The target is SATCAT <code>OBJECT_TYPE</code> classification. It is not collision risk, conjunction outcome, collision probability, or a validated orbital-risk model. The separate candidate prioritization heuristic uses miss distance and relative velocity and is not used as a training label.</p>
+<h2>8. Visualization</h2>
+<p>Four genuine charts were generated from the 68,129-row SATCAT processing run:</p>
+<p class="chart-wrap"><img class="chart" alt="Apogee distribution" src="../reports/eda/apogee_hist.png"></p>
+<p class="chart-wrap"><img class="chart" alt="Perigee distribution" src="../reports/eda/perigee_hist.png"></p>
+<p class="chart-wrap"><img class="chart" alt="Inclination distribution" src="../reports/eda/inclination_hist.png"></p>
+<p class="chart-wrap"><img class="chart" alt="Object type counts" src="../reports/eda/object_type_counts.png"></p>
+<p>The chart metadata and missing-value counts are in <code>reports\eda\eda.json</code>. The charts are actual outputs, not illustrative placeholders.</p>
+<h2>9. Results and Discussion</h2>
+<p>The real SATCAT catalog was loaded with 68,129 rows and zero rejected rows in the bounded ingestion run. The RDD sample demonstrates the required Spark mechanics on records derived from the real catalog. The PySpark model performs better than the majority baseline for the selected object-type task, but the very low R/B and UNK recall shows that the model is not uniformly reliable across classes.</p>
+<p>The bounded SGP4 screen found one Starlink candidate at 19.837271672 km separation and 0.216007095 km/s relative velocity at 2026-10-14T05:50:00Z. The shell implementation matched the brute-force reference on bounded fixtures and uses a streaming epoch API, but the candidate is only a screening result. No independent historical conjunction labels were available for supervised collision-risk modelling.</p>
+<h2>10. Conclusion and Future Work</h2>
+<p>Review 3 requirements are demonstrated for RDD concepts, PySpark preprocessing/splitting/model/evaluation, and visualization. The real-data RDD run closes the earlier gap of relying only on a synthetic fixture, while remaining bounded and safe. Future work requiring additional inputs includes uncertainty-aware conjunction assessment, independent historical CDM/orbit validation, and any collision-risk model with defensible labels. Those tasks are not claimed complete here.</p>
+<h2>11. References</h2>
+<ol><li>CelesTrak Starlink TLE source recorded in <code>data\screening.json</code>.</li><li>NASA NTRS, <em>Iridium 33 / Cosmos 2251 Collision Event Summary</em>, preserved at <code>reports\historical-sources\nasa-iridium-cosmos-event-summary.pdf</code>.</li><li>Apache Spark documentation and the project-local Scala/PySpark source and logs.</li><li>SATCAT source and provenance recorded in <code>data\satcat_clean.json</code> and <code>reports\pipeline-final.log</code>.</li></ol>
+<h2>12. Evidence and Reproducibility</h2>
+<p>The final audit is <code>reports\review3-final-submission-audit.md</code>. Regression commands and outcomes are preserved under <code>reports\</code> and <code>submission\evidence\</code>. The original D: dataset and pre-existing Git changes were preserved.</p></body></html>
